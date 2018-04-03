@@ -42,8 +42,6 @@ public class DelegatorGeneratorMojo extends AbstractGeneratorMojo {
 
         JavaProjectBuilder builder = new JavaProjectBuilder();
 
-        
-
         List<FunctionResult<JavaSource>> results = Arrays
                 .stream(fileSets)
                 .flatMap(this::getIncludedFiles)
