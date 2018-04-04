@@ -1,14 +1,15 @@
 package test.pkg;
 
-import java.io.OutputStream;
+import java.io.*;
+import java.util.Collection;
 
 public interface AnInterface<T, R, E extends Exception> {
 
-    public void doSomething(String value, T otherValue);
+    void doSomething(String value, T otherValue);
 
-    public OutputStream doSomethingElse();
+    OutputStream doSomethingElse();
 
-    public R doSomethingWithGenerics() throws E;
+    R doSomethingWithGenerics(Collection<T> collection) throws E;
 
-
+    Collection<R> doSomethingElseWithGenerics(T value) throws E;
 }

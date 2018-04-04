@@ -9,7 +9,9 @@ in other contexts.
 A Delegator Interface extends the primary interface and consists of a getXXXDelegate() method and a complete set of
 default methods for the primary interface methods that delegate to the instance returned by the getXXXDelegate() method.
 
-A class wishing to perform delegation simply implements the Delegator Interface, implements the getXXXDelegate() method
+A class wishing to perform delegation simply implements the relevant Delegator Interface, implements the getXXXDelegate() method
 and overrides only the methods that it wishes to override.
+
+This class may choose to implement multiple Delegator interface interfaces where it does not violate separation of concerns.
 
 To better understand this pattern please take a look at the examples in the example module.   
