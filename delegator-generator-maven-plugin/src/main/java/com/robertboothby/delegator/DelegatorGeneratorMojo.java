@@ -1,9 +1,9 @@
 package com.robertboothby.delegator;
 
-import com.robertboothby.codegen.AbstractGeneratorMojo;
-import com.robertboothby.codegen.FunctionResult;
-import com.robertboothby.codegen.model.GenerationModel;
-import com.robertboothby.codegen.model.GenerationModelRetriever;
+import com.robertboothby.template.AbstractGeneratorMojo;
+import com.robertboothby.template.FunctionResult;
+import com.robertboothby.template.model.GenerationModel;
+import com.robertboothby.template.model.GenerationModelRetriever;
 import com.thoughtworks.qdox.JavaProjectBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.robertboothby.codegen.Utilities.wrap;
+import static com.robertboothby.template.Utilities.wrap;
 
 @Mojo(
         name = "delegator-generator",
