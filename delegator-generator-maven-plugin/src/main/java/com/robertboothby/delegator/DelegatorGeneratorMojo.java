@@ -1,7 +1,7 @@
 package com.robertboothby.delegator;
 
 import com.robertboothby.template.AbstractGeneratorMojo;
-import com.robertboothby.template.FunctionResult;
+import com.robertboothby.utilities.lambda.FunctionResult;
 import com.robertboothby.template.model.GenerationModel;
 import com.robertboothby.template.model.GenerationModelRetriever;
 import com.thoughtworks.qdox.JavaProjectBuilder;
@@ -20,11 +20,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.robertboothby.template.Utilities.wrap;
+import static com.robertboothby.utilities.lambda.LambdaUtilities.wrap;
 
 @Mojo(
         name = "delegator-generator",
@@ -52,7 +53,7 @@ public class DelegatorGeneratorMojo extends AbstractGeneratorMojo {
 
         //Check for failures
         String failures = results.stream()
-                .filter(FunctionResult::isFailure)
+                .filter(FunctionResult::isExceptional)
                 .map(FunctionResult::toString)
                 .collect(Collectors.joining("\n"));
 
@@ -63,6 +64,7 @@ public class DelegatorGeneratorMojo extends AbstractGeneratorMojo {
         return () -> results
                 .stream()
                 .map(FunctionResult::getResult)
+                .map(Optional::get)
                 .flatMap(this::createGenerationModel)
                 .collect(Collectors.toList());
     }
@@ -96,7 +98,7 @@ public class DelegatorGeneratorMojo extends AbstractGeneratorMojo {
                 .map(file -> new File(new File(fileSet.getDirectory()), file));
     }
 
-    private static <T> Predicate<T> not(Predicate<T> predicate){
+    public static <T> Predicate<T> not(Predicate<T> predicate){
         return t -> !predicate.test(t);
     }
 }
