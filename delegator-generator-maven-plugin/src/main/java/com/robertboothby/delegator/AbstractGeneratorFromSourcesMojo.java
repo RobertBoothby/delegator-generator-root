@@ -1,17 +1,14 @@
 package com.robertboothby.delegator;
 
 import com.robertboothby.template.AbstractGeneratorMojo;
-import com.robertboothby.utilities.lambda.FunctionResult;
 import com.robertboothby.template.model.GenerationModel;
 import com.robertboothby.template.model.GenerationModelRetriever;
+import com.robertboothby.utilities.lambda.FunctionResult;
 import com.thoughtworks.qdox.JavaProjectBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaSource;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.shared.model.fileset.FileSet;
 import org.apache.maven.shared.model.fileset.util.FileSetManager;
 
@@ -27,12 +24,7 @@ import java.util.stream.Stream;
 
 import static com.robertboothby.utilities.lambda.LambdaUtilities.wrap;
 
-@Mojo(
-        name = "delegator-generator",
-        defaultPhase = LifecyclePhase.GENERATE_SOURCES,
-        requiresDependencyResolution = ResolutionScope.RUNTIME
-)
-public class DelegatorGeneratorMojo extends AbstractGeneratorMojo {
+public abstract class AbstractGeneratorFromSourcesMojo extends AbstractGeneratorMojo {
 
     @Parameter(required = true)
     private FileSet[] fileSets;
@@ -69,23 +61,9 @@ public class DelegatorGeneratorMojo extends AbstractGeneratorMojo {
                 .collect(Collectors.toList());
     }
 
-    private Stream<GenerationModel> createGenerationModel(JavaSource javaSource) {
+    protected abstract Stream<GenerationModel> createGenerationModel(JavaSource javaSource);
 
-        return javaSource.getClasses()
-                .stream()
-                .filter(JavaClass::isInterface)
-                .filter(JavaClass::isPublic)
-                .filter(not(JavaClass::isInner))
-                .map(javaClass ->
-                        new GenerationModel(
-                                "Delegator.ftl",
-                                getModel(javaSource, javaClass),
-                                javaClass.getFullyQualifiedName().replace('.', '/') + "Delegator.java"
-                        )
-                );
-    }
-
-    private Map<String, Object> getModel(JavaSource javaSource, JavaClass javaClass) {
+    protected Map<String, Object> getModel(JavaSource javaSource, JavaClass javaClass) {
         Map<String, Object> result = new HashMap<>();
         result.put("javaSource", javaSource);
         result.put("javaClass", javaClass);
@@ -101,4 +79,6 @@ public class DelegatorGeneratorMojo extends AbstractGeneratorMojo {
     public static <T> Predicate<T> not(Predicate<T> predicate){
         return t -> !predicate.test(t);
     }
+
+
 }

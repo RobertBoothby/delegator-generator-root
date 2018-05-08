@@ -59,6 +59,9 @@
                             <classifier>sources</classifier>
                             <failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
                             <outputDirectory>${project.build.directory}/sources</outputDirectory>
+                            <includes>
+                                **/MongoCollection.java
+                            </includes>
                         </configuration>
                     </execution>
                 </executions>
@@ -69,24 +72,42 @@
                 <version>${project.version}</version>
                 <executions>
                     <execution>
-                        <id>generate-delegates</id>
+                        <id>generate-delegators-from-sources</id>
                         <goals>
-                            <goal>delegator-generator</goal>
+                            <goal>generate-delegators-from-sources</goal>
                         </goals>
+                        <configuration>
+                            <fileSets>
+                                <fileSet>
+                                    <directory>${project.build.sourceDirectory}</directory>
+                                    <includes>**/*.java</includes>
+                                </fileSet>
+                                <fileSet>
+                                    <directory>${project.build.directory}/sources</directory>
+                                    <includes>**/MongoCollection.java</includes>
+                                </fileSet>
+                            </fileSets>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-decorators-from-sources</id>
+                        <goals>
+                            <goal>generate-decorators-from-sources</goal>
+                        </goals>
+                        <configuration>
+                            <fileSets>
+                                <fileSet>
+                                    <directory>${project.build.sourceDirectory}</directory>
+                                    <includes>**/*.java</includes>
+                                </fileSet>
+                                <fileSet>
+                                    <directory>${project.build.directory}/sources</directory>
+                                    <includes>**/MongoCollection.java</includes>
+                                </fileSet>
+                            </fileSets>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <fileSets>
-                        <fileSet>
-                            <directory>${project.build.sourceDirectory}</directory>
-                            <includes>**/*.java</includes>
-                        </fileSet>
-                        <fileSet>
-                            <directory>${project.build.directory}/sources</directory>
-                            <includes>**/MongoCollection.java</includes>
-                        </fileSet>
-                    </fileSets>
-                </configuration>
             </plugin>
         </plugins>
     </build>
